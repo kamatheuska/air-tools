@@ -20,17 +20,7 @@ app.use(cors());
 
 console.log(process.env.NODE_ENV);
 
-
-app.get('/', (req, res) => {
-  res.status(200).sendFile(path.dirname(__dirname) + '/client/dist/index.html');
-})
-
-app.post('/register', (req, res) => {
-  res.send({
-    message: `Hello ${req.body.email}, Your user was registered!`
-  });
-});
-
+require('./routes.js')(app);
 app.listen(port, () => {
   console.log(`Server started on port ${port}`);
 });
