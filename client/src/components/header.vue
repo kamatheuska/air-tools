@@ -17,6 +17,7 @@ export default {
 <style>
 
 .header {
+  width:100%;
   height: auto;
   padding-left: 3rem;
   text-shadow: 4px 2px 0 #eee;
