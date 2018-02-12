@@ -1,6 +1,10 @@
 const mongoose = require('mongoose');
+const validator = require('validator');
+const jwt = require('jsonwebtoken');
+const _ = require('lodash');
+const bcrypt = require('bcryptjs');
 
-const Staff = mongoose.model('Staff', {
+const StaffSchema = new mongoose.Schema({
   data: [
     {
       name: {
@@ -20,12 +24,14 @@ const Staff = mongoose.model('Staff', {
         trim: true,
         required: true,
         validate: {
-          validator: validator.isEmail(),
-          message: '{VALUE} no es un email válido'
-        }
+          validator: validator.isEmail,
+          message: '{VALUE} no es un email válido',
+        },
       },
     },
   ],
 });
+
+const Staff = mongoose.model('Staff', StaffSchema);
 
 module.exports = { Staff };

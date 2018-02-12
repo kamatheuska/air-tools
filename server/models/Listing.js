@@ -5,7 +5,7 @@ const _ = require('lodash');
 const bcrypt = require('bcryptjs');
 
 
-const Listing = mongoose.model('Listing', {
+const ListingSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
@@ -95,7 +95,7 @@ const Listing = mongoose.model('Listing', {
     },
   },
   warnings: {
-    check_in: {
+    checkin: {
       spa: {
         type: String,
         trim: true,
@@ -108,5 +108,7 @@ const Listing = mongoose.model('Listing', {
   },
 });
 
+
+const Listing = mongoose.model('Listing', ListingSchema);
 
 module.exports = { Listing };

@@ -20,3 +20,9 @@ selenium-debug.log
 
 # Local configuration files
 server/config/config.json
+
+# swap files
+*.swp
+
+# other bs
+vimtest
