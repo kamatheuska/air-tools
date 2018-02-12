@@ -142,8 +142,7 @@ label {
 input[type="text"]{
   border-style: none;
   border: 1px #ddd solid;
-  width: 100%;
-  height: 2.5rem;
+  width: 100%;s
   height: 2.5rem;
   padding: 2px;
 }

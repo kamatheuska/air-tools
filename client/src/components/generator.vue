@@ -62,7 +62,7 @@ form.generator-grid label:nth-child(1) {
   grid-column: 1 / -1;
 }
 form.generator-grid #cliente {
-  grid-column: 1 / span 6;
+  grid-column: 1 / -1;
 }
 form.generator-grid label:nth-child(3) {
   grid-column: 1 / -1;

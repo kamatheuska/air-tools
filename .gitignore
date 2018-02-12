@@ -17,3 +17,6 @@ selenium-debug.log
 *.ntvs*
 *.njsproj
 *.sln
+
+# Local configuration files
+server/config/config.json
