@@ -1,36 +1,68 @@
 const mongoose = require('mongoose');
+const validator = require('validator');
+const jwt = require('jsonwebtoken');
+const _ = require('lodash');
+const bcrypt = require('bcryptjs');
+
 
 const Listing = mongoose.model('Listing', {
-  language: {
+  name: {
     type: String,
     required: true,
+    trim: true,
+    unique: true,
   },
   location: {
     type: String,
     required: true,
     trim: true,
+    unique: true,
   },
   rules: {
-    check_in: {
+    checkin: {
       start: {
         type: Number,
+        default: 1500,
       },
       end: {
         type: Number,
+        default: 2200,
       },
-      early_msg: {
-        type: String,
+      earlyMsg: {
+        spa: {
+          type: String,
+          trim: true,
+        },
+        eng: {
+          type: String,
+          trim: true,
+        },
       },
-      late_msg: {
-        type: String,
+      lateMsg: {
+        spa: {
+          type: String,
+          trim: true,
+        },
+        eng: {
+          type: String,
+          trim: true,
+        },
       },
     },
-    check_out: {
+    checkout: {
       end: {
         type: Number,
+        default: 1100,
       },
-      late_msg: {
-        type: String,
+      lateMsg: {
+        spa: {
+          type: String,
+          trim: true,
+        },
+        eng: {
+          type: String,
+          trim: true,
+        },
       },
     },
   },
@@ -42,15 +74,36 @@ const Listing = mongoose.model('Listing', {
   },
   introductions: {
     host: {
-      type: String,
+      spa: {
+        type: String,
+        trim: true,
+      },
+      eng: {
+        type: String,
+        trim: true,
+      },
     },
     area: {
-      type: String,
+      spa: {
+        type: String,
+        trim: true,
+      },
+      eng: {
+        type: String,
+        trim: true,
+      },
     },
   },
   warnings: {
     check_in: {
-      type: String,
+      spa: {
+        type: String,
+        trim: true,
+      },
+      eng: {
+        type: String,
+        trim: true,
+      },
     },
   },
 });

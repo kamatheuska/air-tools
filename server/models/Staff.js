@@ -18,6 +18,11 @@ const Staff = mongoose.model('Staff', {
       email: {
         type: String,
         trim: true,
+        required: true,
+        validate: {
+          validator: validator.isEmail(),
+          message: '{VALUE} no es un email válido'
+        }
       },
     },
   ],
