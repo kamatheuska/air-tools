@@ -7,12 +7,12 @@ const { Staff } = require('./../../models/Staff');
 
 const userOneId = new ObjectID();
 const userTwoId = new ObjectID();
-const dummyText = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua'
+const dummyText = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua';
 
 const users = [{
+  _id: userOneId,
   name: 'Juan Pardo',
   phone: 573002574247,
-  _id: userOneId,
   email: 'example@example.com',
   password: 'userOnePass',
   tokens: [{
@@ -20,9 +20,9 @@ const users = [{
     token: jwt.sign({_id: userOneId, access: 'auth'}, process.env.JWT_SECRET).toString()
   }]
 }, {
+  _id: userTwoId,
   name:'Matheus Rando',
   phone: 34621541281,
-  _id: userTwoId,
   email: 'matheus@example.com',
   password: 'userTwoPass',
   tokens: [{
@@ -72,7 +72,7 @@ const listings = [{
 const populateUsers = (done) => {
   User.remove({}).then(() => {
     let userOne = new User(users[0]).save();
-    let useTwo = new User(users[1]).save();
+    let userTwo = new User(users[1]).save();
 
     return Promise.all([userOne, userTwo]);
   }).then(() => done());
