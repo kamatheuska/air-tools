@@ -59,7 +59,7 @@ describe('POST /users', () => {
 
  it('should not create a user if email in use', (done) => {
    let user = _.pick(users[1], ['_id','name', 'phone', 'email', 'password']);
-   //user.email = users[0].email;
+   user.email = users[0].email;
    
    let pre = () => {
      return new Promise((resolve, reject) => {
@@ -89,6 +89,6 @@ describe('POST /users', () => {
      });
    }
    
-   Promise.all([{pre, req}]).catch((e) => done).then(() => done());
+   Promise.all([pre, req]).catch((e) => done).then(() => done());
  });
 });
