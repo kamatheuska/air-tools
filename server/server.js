@@ -23,7 +23,7 @@ app.use(bodyParser.json());
 app.post('/users', (req, res) => {
   let body = _.pick(req.body, ['name', 'phone', 'email', 'password']);
   let user = new User(body);
-
+  
   user.save().then(() => {
     return user.generateAuthToken();
   }).then((token) => {

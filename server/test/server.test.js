@@ -14,8 +14,8 @@ const { listings, populateListings, users, populateUsers } = require('./seed/see
 beforeEach(populateUsers);
 // beforeEach(populateListings);
 
-describe('POST /users', () => {
-  it('should create a new user', (done) => {
+describe('POST /users', function () {
+  it('should create a new user', function(done) {
     let email = 'ghandi@india.com';
     let password = 'Abc123!!';
     let phone = 35678896122;
@@ -46,7 +46,7 @@ describe('POST /users', () => {
       });
   });
 
- it('should return validation error if request invalid', (done) => {
+ it('should return validation error if request invalid', function(done) {
    let user = _
      .pick(users[0], ['name', 'phone', 'email', 'password']);
   // user.email = 'bademail';
@@ -57,7 +57,29 @@ describe('POST /users', () => {
      .end(done);
  });
 
- it('should not create a user if email in use', (done) => {
+  it('should not create a user if email in use', async function () {
+    let user = _.pick(users[1], ['_id', 'name', 'phone', 'email', 'password']);
+    //user.email = users[0].email;
+    
+    const pre = () =>
+      request(app)
+        .post('/users')
+        .send(users[0])
+        .expect(200);
+
+    const req = () => 
+      request(app)
+        .post('/users')
+        .send(user)
+        .expect(400);
+    
+    await pre();
+    const response = await req();
+    const userDb = User.findOne({_id: user._id});
+    expect(userDB).not.toBeTruthy();
+  }
+
+ it('should not create a user if email in use', function(done) {
    let user = _.pick(users[1], ['_id','name', 'phone', 'email', 'password']);
    user.email = users[0].email;
    

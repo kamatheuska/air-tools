@@ -48,6 +48,16 @@ const UserSchema = new mongoose.Schema({
   },
 );
 
+UserSchema.methods.toJSON = function () {
+  let user = this;
+  const userObject = this.toObject();
+
+  const map = ({_id, email, phone}) => ({_id, email, phone});
+  
+  return map(userObject);
+}
+
+
 UserSchema.methods.generateAuthToken = function () {
   let user = this;
   let access = 'auth';
