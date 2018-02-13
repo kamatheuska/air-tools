@@ -1,6 +1,7 @@
 const expect = require('expect');
 const request = require('supertest');
 const { ObjectID } = require('mongodb');
+const _ = require('lodash');
 
 const { app } = require('./../server');
 
@@ -46,9 +47,9 @@ describe('POST /users', () => {
   });
 
  it('should return validation error if request invalid', (done) => {
-   let user = users[0];
-   user.email = 'bademail';
-
+   let user = _
+     .pick(users[0], ['name', 'phone', 'email', 'password']);
+  // user.email = 'bademail';
    request(app)
      .post('/users')
      .send({ user })
@@ -57,26 +58,37 @@ describe('POST /users', () => {
  });
 
  it('should not create a user if email in use', (done) => {
-   let userEmailInUse = users[1];
-   userEmailInUse.email = users[0].email;
+   let user = _.pick(users[1], ['_id','name', 'phone', 'email', 'password']);
+   //user.email = users[0].email;
    
-   request(app)
-    .post('/users')
-    .send(users[0])
-    .expect(200)
-    .end();
-
-   request(app)
-     .post('/users')
-     .send(userEmailInUse)
-     .expect(400)
-     .end((err, res) => {
-       if (err) return done(err);
-
-       User.findOne({ email }).then((user) => {
-         expect(user).not.toBeTruthy();
-         done();
-       }).catch((e) => done(e));
+   let pre = () => {
+     return new Promise((resolve, reject) => {
+       request(app)
+         .post('/users')
+         .send(users[0])
+         .expect(200)
+         .end(); 
      });
+   }
+   let req = () => {
+     return new Promise((resolve, reject) => {
+     request(app)
+       .post('/users')
+       .send(user)
+       .expect(400)
+       .end((err, res) => {
+         if (err) return done(err);
+       
+         User.findOne({
+           _id: user._id
+         }).then((userDB) => {
+           expect(userDB).not.toBeTruthy();
+           done();
+         }).catch((e) => done(e));
+       });
+     });
+   }
+   
+   Promise.all([{pre, req}]).catch((e) => done).then(() => done());
  });
 });
