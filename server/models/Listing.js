@@ -1,11 +1,15 @@
 const mongoose = require('mongoose');
-// const validator = require('validator');
-// const jwt = require('jsonwebtoken');
-// const _ = require('lodash');
-// const bcrypt = require('bcryptjs');
+const validator = require('validator');
+const jwt = require('jsonwebtoken');
+const _ = require('lodash');
+const bcrypt = require('bcryptjs');
 
 
 const ListingSchema = new mongoose.Schema({
+ //  _creator: {
+ //    type: mongoose.Schema.Types.ObjectId,
+ //    requirer: true
+ //  },
   name: {
     type: String,
     required: true,
@@ -107,7 +111,6 @@ const ListingSchema = new mongoose.Schema({
     },
   },
 });
-
 
 const Listing = mongoose.model('Listing', ListingSchema);
 

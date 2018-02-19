@@ -26,3 +26,6 @@ server/config/config.json
 
 # other bs
 vimtest
+
+# before building for production
+client/dist/

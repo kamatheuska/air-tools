@@ -4,8 +4,9 @@ const express = require('express');
 const path = require('path');
 const _ = require('lodash');
 const bodyParser = require('body-parser');
-// const morgan = require('morgan');
 const { ObjectID } = require('mongodb');
+const morgan = require('morgan');
+const cors = require('cors'); // remove in PRODUCTION
 
 const { authenticate } = require('./middleware/authenticate.js');
 const { mongoose } = require('./db/mongoose');
@@ -16,14 +17,23 @@ const { User } = require('./models/User.js');
 
 const app = express();
 const port = process.env.PORT || 3000;
+const dist = path.join(__dirname, '..', 'client/dist')
 
-// app.use(morgan('combined'));
 app.use(bodyParser.json());
+app.use(express.static(dist));
+app.use(morgan('combined'));
+app.use(cors()); // remove in PRODUCTION
+
+app.get('/', (req, res) => {
+  res
+    .status(200)
+    .sendFile(path.join(dist, 'index.html'));
+});
 
 app.post('/users', (req, res) => {
-  let body = _.pick(req.body, ['name', 'phone', 'email', 'password']);
+  let body = _.pick(req.body, ['email', 'password']);
   let user = new User(body);
-  
+  console.log(req.body);  
   user.save().then(() => {
     return user.generateAuthToken();
   }).then((token) => {
@@ -31,6 +41,18 @@ app.post('/users', (req, res) => {
   }).catch((e) => {
     res.status(400).send(e);
   });
+});
+
+app.post('/listing', (req, res) => {
+  let body = req.body;
+  let listing = new Listing(body);
+
+  listing.save().then((item) => {
+    res.status(200).send(item);
+  }).catch((e) => {
+    res.status(400).send(e);
+  });
+  
 });
 
 app.listen(port, () => {

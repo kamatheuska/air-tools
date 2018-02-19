@@ -7,13 +7,11 @@ const bcrypt = require('bcryptjs');
 const UserSchema = new mongoose.Schema({
   name: {
     type: String,
-    required: true,
     minlength: 3,
     trim: true,
   },
   phone: {
     type: String,
-    required: true,
     minlength: 10,
     trim: true,
   },
@@ -52,7 +50,7 @@ UserSchema.methods.toJSON = function () {
   let user = this;
   const userObject = this.toObject();
 
-  const map = ({_id, email, phone}) => ({_id, email, phone});
+  const map = ({_id, email }) => ({_id, email });
   
   return map(userObject);
 }
