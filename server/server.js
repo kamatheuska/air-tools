@@ -31,7 +31,7 @@ app.get('/', (req, res) => {
 });
 
 app.post('/users', (req, res) => {
-  let body = _.pick(req.body, ['email', 'password']);
+  let body = _.pick(req.body, ['email', 'password', 'phone', 'name']);
   let user = new User(body);
   console.log(req.body);  
   user.save().then(() => {

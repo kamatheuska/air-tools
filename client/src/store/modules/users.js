@@ -20,30 +20,39 @@ const getters = {
 };
 
 const mutations = {
-  getUserCredentials: (state, credentials) => {
-    console.log('mutation', credentials);
-    _.assign(state.user, credentials);
-  },
-  setUserRegistration: (state) => {
-    state.isRegistered = true;
+  updateUserProp: (state, payload) => {
+    switch (payload.type) {
+      default:
+        state.user.name = payload.value;
+        break;
+      case 'number':
+        state.user.phone= payload.value;
+        break;
+      case 'email':
+        state.user.email = payload.value;
+        break;
+      case 'password':
+        state.user.password = payload.value;
+        break;
+    }
   },
 };
 
 const actions = {
-  registerUser({ commit, credentials }) {
-    commit('getUserCredentials', credentials);
-    let user = _.pick(state.user, ['email', 'password']);
-    console.log(state.user);
-    console.log('****', user);
-    axios.create({ baseURL: state.urlApi })
-      .post('users', user)
-      .then((res) => {
-        // succesLogger(res)
-        if (res.status === 200) {
-          commit('setUserRegistration');
-        }
-      })
-      .catch(e => e);
+  registerUser({ commit }, credentials) {
+    return new Promise((resolve, reject) => {
+      axios.create({ baseURL: state.urlApi })
+        .post('users', state.user)
+        .then((res) => {
+          if (res.status === 200) {
+            state.isRegistered = true;
+            resolve();
+          } else {
+            state.isRegistered = false;
+            reject();
+          }
+        });
+    });
   },
 };
 

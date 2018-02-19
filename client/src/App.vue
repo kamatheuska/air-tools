@@ -97,7 +97,7 @@ h4 {
   border: #ddd solid 1px;
   padding: 3rem;
 }
-.box.login-grid > *, .box.register-grid > * {
+.box.login-grid form > *, .box.register-grid form > * {
   margin: 2rem;
 }
 .header {
@@ -139,11 +139,12 @@ label {
   font-weight: 900;
   color: black;
 }
-input[type="text"]{
+input  {
   border-style: none;
   border: 1px #ddd solid;
-  width: 100%;s
-  height: 2.5rem;
+  position: relative;
+  width: 100%;
+  height: 2.8rem;
   padding: 2px;
 }
 
