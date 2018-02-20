@@ -46,71 +46,122 @@ describe('POST /users', function () {
       });
   });
 
- it('should return validation error if request invalid', function(done) {
-   let user = _
-     .pick(users[0], ['name', 'phone', 'email', 'password']);
-  // user.email = 'bademail';
-   request(app)
+  it('should return validation error if email is invalid', function(done) {
+    let user = {
+      email: 'bademail',
+      password: '123kiw23!',
+      name: 'Nadia Paez',
+      phone: 93827370123
+    };
+    // user.email = 'some@goodemail.com';
+
+    request(app)
+      .post('/users')
+      .send(user)
+      .expect(400)
+      .end(done);
+  });
+
+  it('should return validation error if password is invalid', function(done) {
+    let user = {
+      email: 'goodboy@example.com',
+      password: '123w',
+      name: 'Paola Nadiar',
+      phone: 3334441234
+    };
+   // user.password = 'some123Goodpass';
+
+    request(app)
+      .post('/users')
+      .send(user)
+      .expect(400)
+      .end(done);
+  });
+//   it('should not create a user if email in use', async function () {
+//     let user = _.pick(users[1], ['_id', 'name', 'phone', 'email', 'password']);
+//     //user.email = users[0].email;
+//     
+//     const pre = () =>
+//       request(app)
+//         .post('/users')
+//         .send(users[0])
+//         .expect(200);
+// 
+//     const req = () => 
+//       request(app)
+//         .post('/users')
+//         .send(user)
+//         .expect(400);
+//     
+//     await pre();
+//     const response = await req();
+//     const userDb = User.findOne({_id: user._id});
+//     expect(userDB).not.toBeTruthy();
+//   }
+
+  it('should not create a user if email in use', function(done) {
+    let user = {
+      email: users[0].email,
+      password: '123wpass!!',
+      name: 'Pareja Naranjo',
+      phone: 3334441234
+    };
+   // user.email = 'some@new.email';
+
+    request(app)
      .post('/users')
-     .send({ user })
+     .send(user)
      .expect(400)
      .end(done);
- });
+  });
+});
 
-  it('should not create a user if email in use', async function () {
-    let user = _.pick(users[1], ['_id', 'name', 'phone', 'email', 'password']);
-    //user.email = users[0].email;
-    
-    const pre = () =>
-      request(app)
-        .post('/users')
-        .send(users[0])
-        .expect(200);
+describe('POST /users/login', function() {
+  it('should login user and return auth token', function(done) {
+    let user = _.pick(users[0], ['email', 'password']);
+    request(app)
+      .post('/users/login')
+      .send(user)
+      .expect(200)
+      .expect((res) => {
+        expect(res.headers['x-auth']).toBeTruthy();
+      })
+      .end((err, res) => {
+        if (err) {
+          return done(err);
+        }
 
-    const req = () => 
-      request(app)
-        .post('/users')
-        .send(user)
-        .expect(400);
-    
-    await pre();
-    const response = await req();
-    const userDb = User.findOne({_id: user._id});
-    expect(userDB).not.toBeTruthy();
-  }
+        User.findById(users[0]._id).then((user) => {
+          expect(user.tokens[1]).toMatchObject({
+            access: 'auth',
+            token: res.headers['x-auth']
+          });
+          done();
+        }).catch((e) => done(e));
+      })
+  });
 
- it('should not create a user if email in use', function(done) {
-   let user = _.pick(users[1], ['_id','name', 'phone', 'email', 'password']);
-   user.email = users[0].email;
-   
-   let pre = () => {
-     return new Promise((resolve, reject) => {
-       request(app)
-         .post('/users')
-         .send(users[0])
-         .expect(200)
-         .end(); 
-     });
-   }
-   let req = () => {
-     return new Promise((resolve, reject) => {
-     request(app)
-       .post('/users')
-       .send(user)
-       .expect(400)
-       .end((err, res) => {
-         if (err) return done(err);
-       
-         User.findOne({
-           _id: user._id
-         }).then((userDB) => {
-           expect(userDB).not.toBeTruthy();
-           done();
-         }).catch((e) => done(e));
-       });
-     });
-   }
-   
-   Promise.all([pre, req]).catch((e) => done).then(() => done());
- });
+  it('should reject invalid login', function(done) {
+    request(app)
+      .post('/users/login')
+      .send({
+        email: users[1].email,
+        password: users[1].password + 'abc1'
+       // password: 'notTheRightPass' 
+      })
+      .expect(400)
+      .expect((res) => {
+        expect(res.headers['x-auth']).not.toBeTruthy();
+      })
+      .end((err, res) => {
+        if (err) {
+          done(err)
+        }
+
+        User.findById(users[1]._id).then((user) => {
+          expect(user.tokens.length).toBe(1);
+          done();
+        }).catch((e) => done(e));
+      });
+  });
 });

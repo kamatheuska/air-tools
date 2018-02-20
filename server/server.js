@@ -21,19 +21,18 @@ const dist = path.join(__dirname, '..', 'client/dist')
 
 app.use(bodyParser.json());
 app.use(express.static(dist));
-app.use(morgan('combined'));
 app.use(cors()); // remove in PRODUCTION
-
+if (process.env.NODE_ENV !== 'test') {
+  app.use(morgan('combined'));
+}
 app.get('/', (req, res) => {
-  res
-    .status(200)
-    .sendFile(path.join(dist, 'index.html'));
+  res.status(200)
+     .sendFile(path.join(dist, 'index.html'));
 });
 
 app.post('/users', (req, res) => {
   let body = _.pick(req.body, ['email', 'password', 'phone', 'name']);
   let user = new User(body);
-  console.log(req.body);  
   user.save().then(() => {
     return user.generateAuthToken();
   }).then((token) => {

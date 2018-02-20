@@ -14,14 +14,14 @@ const UserSchema = new mongoose.Schema({
   phone: {
     type: String,
     required: true,
-    minlength: 10,
+    minlength: 6,
     trim: true,
   },
   email: {
     type: String,
     trim: true,
     required: true,
-    minlenght: 1,
+    minlength: 1,
     unique: true,
     validate: {
       validator: validator.isEmail,
@@ -31,7 +31,7 @@ const UserSchema = new mongoose.Schema({
   password: {
     type: String,
     required: true,
-    minlenght: 6,
+    minlength: 6,
   },
   tokens: [{
     access: {
@@ -85,7 +85,7 @@ UserSchema.statics.findByCredentials = function (email, password) {
 
 UserSchema.pre('save', function (next) {
   let user = this;
-
+  
   if (user.isModified('password')) {
     bcrypt.genSalt(11, (err, salt) => {
       bcrypt.hash(user.password, salt, (err, hash) => {
