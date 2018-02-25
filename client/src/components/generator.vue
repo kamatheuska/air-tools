@@ -1,22 +1,51 @@
 <template>
   <div class="container-grid">
-    <app-header id="app-header"></app-header>
-    <form class="box content generator-grid">
-      <label for="cliente">Ingresa el nombre del huésped: </label>
-      <input type="text" v-model="input.cliente" id="cliente">
+    <app-header></app-header>
+    <form
+      @click.prevent="onSubmit"
+      class="box content generator-grid">
+      <label for="cliente">
+        Ingresa el nombre del huésped:
+      </label>
+      <input
+        type="text"
+        v-model="input.cliente"
+        id="cliente">
       <label>Idioma:</label>
 
-      <input type="radio" id="español" value="spa" v-model="input.idioma" checked>
-      <label for="español">Español</label>
-      <input type="radio" id="ingles" value="eng" v-model="input.idioma">
-      <label for="ingles">Ingles</label>
-
+      <input
+        type="radio"
+        id="español"
+        value="spa"
+        v-model="input.idioma"
+        checked>
+      <label for="español">
+        Español
+      </label>
+      <input
+        type="radio"
+        id="ingles"
+        value="eng"
+        v-model="input.idioma">
+      <label for="ingles">
+        Ingles
+      </label>
       <label>Lugar:</label>
-      <input type="radio" id="ctg" value="ctg" v-model="input.lugar" checked>
+      <input
+        type="radio"
+        id="ctg" value="ctg"
+        v-model="input.lugar"
+        checked>
       <label for="ctg">Cartagena</label>
-      <input type="radio" id="bcn" value="bcn" v-model="input.lugar">
+      <input
+        type="radio"
+        id="bcn"
+        value="bcn"
+        v-model="input.lugar">
       <label for="bcn">Barcelona</label>
-      <button @click.prevent="onSubmit">Generar</button>
+      <button
+        type="submit"
+        class="btn-content">Generar</button>
     </form>
     <app-footer id="app-footer"></app-footer>
   </div>
@@ -39,9 +68,9 @@ export default {
       return undefined;
     },
     logInput() {
-      this.logMsg = `Generando plantillas en ${this.input.idioma} para el huésped ${this.input.cliente} en ${this.input.lugar}...`;
-      // eslint-disable-next-line
-      console.log(this.logMsg);
+      this.logMsg = `Generando plantillas en ${this.input.idioma}
+                     para el huésped ${this.input.cliente} en 
+                     ${this.input.lugar}...`;
       return this.logMsg;
     },
   },

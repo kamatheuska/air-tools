@@ -1,34 +1,57 @@
- <template>
+<template>
   <div class="container-grid-no-heading">
     <div class="box register-grid">
-      <form class= "" @submit.prevent="registerUser">
+      <form @submit.prevent="registerUser">
         <h1>Registrar usuario</h1>
         <div>
-          <input placeholder="Nombre" type="text" :value="user.name" @input="valueUpdated">
+          <input
+            placeholder="Nombre"
+            type="text"
+            :value="user.name"
+            @input="valueUpdated">
         </div>
         <div>
-          <input placeholder="Teléfono" type="number" :value="user.phone" @input="valueUpdated">
+          <input
+            placeholder="Teléfono"
+            type="number"
+            :value="user.phone"
+            @input="valueUpdated">
         </div>
         <div>
-          <input placeholder="Email" type="email" :value="user.email" @input="valueUpdated">
+          <input
+            placeholder="Email"
+            type="email"
+            :value="user.email"
+            @input="valueUpdated">
         </div>
         <div>
-          <input placeholder="Contraseña" type="password" :value="user.password" @input="valueUpdated">
+          <input
+            placeholder="Contraseña"
+            type="password"
+            :value="user.password"
+            @input="valueUpdated">
         </div>
         <div class="btn-register">
-          <button type="submit" >Continuar</button>
-          <p v-if="isRegistered" >Su usuario ha sido registrado</p>
+          <button type="submit" >REGISTRARSE</button>
+          <p v-if="isRegistered && !registrationError">
+            Su usuario ha sido registrado
+          </p>
+          <p v-if="!isRegistered && registrationError">
+            Inténtalo de nuevo.
+          </p>
         </div>
       </form>
     </div>
     <div class="registered">
-      <h4>¿Ya estás registrado? Haz clic <router-link to="/login">aqui</router-link></h4>
+      <h4>¿Ya estás registrado? Haz clic
+        <router-link to="/login"> aqui</router-link>
+      </h4>
     </div>
   </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapMutations, mapActions, mapGetters } from 'vuex';
 
 export default {
   data() {
@@ -44,27 +67,25 @@ export default {
   computed: {
     ...mapGetters([
       'isRegistered',
+      'registrationError',
     ]),
   },
   methods: {
+    ...mapActions({
+      register: 'registerUser',
+    }),
+    ...mapMutations({
+      update: 'UPDATE_USER_PROP',
+    }),
+    registerUser() {
+      this.register().then(() => {
+        this.$router.push('login');
+      }).catch(err => err);
+    },
     valueUpdated(e) {
-      let payload = {
+      this.update({
         type: e.target.getAttribute('type'),
         value: e.target.value,
-      };
-
-      this.$store.commit('updateUserProp', payload);
-    },
-    routeToLogin() {
-      console.log(this.isRegistered);
-      if (this.isRegistered) {
-        this.$router.push('login');
-      }
-    },
-    registerUser() {
-      let router = this.$router;
-      this.$store.dispatch('registerUser', this.user).then(function() {
-        router.push('login');
       });
     },
   },

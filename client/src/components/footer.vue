@@ -20,8 +20,9 @@ footer {
   padding-left: 3rem;
   text-align: center;
   text-shadow: 4px 2px 0 #eee;
-  color: #01848B;
-  font-weight: 100;
+  background-color: #01848B;
+  color: #fff;
+  font-weight: 900;
   border-top: 2px groove #eee;
 }
 </style>

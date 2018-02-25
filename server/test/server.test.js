@@ -77,27 +77,6 @@ describe('POST /users', function () {
       .expect(400)
       .end(done);
   });
-//   it('should not create a user if email in use', async function () {
-//     let user = _.pick(users[1], ['_id', 'name', 'phone', 'email', 'password']);
-//     //user.email = users[0].email;
-//     
-//     const pre = () =>
-//       request(app)
-//         .post('/users')
-//         .send(users[0])
-//         .expect(200);
-// 
-//     const req = () => 
-//       request(app)
-//         .post('/users')
-//         .send(user)
-//         .expect(400);
-//     
-//     await pre();
-//     const response = await req();
-//     const userDb = User.findOne({_id: user._id});
-//     expect(userDB).not.toBeTruthy();
-//   }
 
   it('should not create a user if email in use', function(done) {
     let user = {
@@ -106,7 +85,7 @@ describe('POST /users', function () {
       name: 'Pareja Naranjo',
       phone: 3334441234
     };
-   // user.email = 'some@new.email';
+ //  user.email = 'some@new.email';
 
     request(app)
      .post('/users')

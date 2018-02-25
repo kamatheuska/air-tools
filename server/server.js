@@ -21,10 +21,12 @@ const dist = path.join(__dirname, '..', 'client/dist')
 
 app.use(bodyParser.json());
 app.use(express.static(dist));
-app.use(cors()); // remove in PRODUCTION
+app.use(cors({ exposedHeaders: 'x-auth' })); // remove in PRODUCTION
+
 if (process.env.NODE_ENV !== 'test') {
   app.use(morgan('combined'));
 }
+
 app.get('/', (req, res) => {
   res.status(200)
      .sendFile(path.join(dist, 'index.html'));
